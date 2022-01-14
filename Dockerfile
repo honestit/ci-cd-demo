@@ -9,6 +9,8 @@ RUN mvn package -DskipTests
 
 # Start from openjdk latest image
 FROM openjdk:latest
+# Configure default port for GCP Cloud Run
+ENV PORT 8080
 # Copy previously built jar
 COPY --from=builder /app/target/*.jar /app.jar
 # Expose default port
