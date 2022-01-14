@@ -9,10 +9,6 @@ RUN mvn package -DskipTests
 
 # Start from openjdk latest image
 FROM openjdk:latest
-# Create user and group for security reason
-RUN addgroup -S demo && adduser -S demo -G demo
-# Use new user
-USER demo:demo
 # Copy previously built jar
 COPY --from=builder /app/target/*.jar /app.jar
 # Expose default port
