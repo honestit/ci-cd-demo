@@ -1,12 +1,20 @@
+# Start from base maven image as builder role
+FROM maven:3.6-jdk-11 as builder
+# Create workdir and copy required files
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+# Package jar file without running tests
+RUN mvn package -DskipTests
+
+# Start from openjdk latest image
 FROM openjdk:latest
 # Create user and group for security reason
 RUN addgroup -S demo && adduser -S demo -G demo
 # Use new user
 USER demo:demo
-# Set variable to jar
-ARG JAR_FILE=target/*.jar
-# Copy jar as a predefined file
-COPY ${JAR_FILE} app.jar
+# Copy previously built jar
+COPY --from=builder /app/target/*.jar /app.jar
 # Expose default port
 EXPOSE 8080
 # Set entry point to run jar file
