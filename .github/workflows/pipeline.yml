@@ -17,6 +17,7 @@ jobs:
     - uses: actions/setup-java@v2
       with:
         java-version: '11'
+        distribution: 'adopt'
         cache: maven
     # run tests
     - run: mvn --batch-mode test
@@ -31,6 +32,7 @@ jobs:
     - uses: actions/setup-java@v2
       with:
         java-version: '11'
+        distribution: 'adopt'
         cache: maven
     # build and run integration tests
     - run: mvn --batch-mode --update-snapshots verify
