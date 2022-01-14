@@ -78,7 +78,7 @@ jobs:
           gcloud run deploy demo \
           --region europe-west1 \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/demo \
-          --plaform managed \
+          --platform managed \
           --allow-unauthenticated \
           --project ${{ secrets.GCP_PROJECT_ID }}
 
