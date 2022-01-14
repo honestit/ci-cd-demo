@@ -7,8 +7,8 @@ on:
     - main
 
 jobs:
-  qa:
-    name: Running tests
+  tests:
+    name: Running unit tests
     runs-on: ubuntu-latest
     steps:
     # checkout code
@@ -20,9 +20,9 @@ jobs:
         cache: maven
     # run tests
     - run: mvn --batch-mode test
-  build:
-    name: Build and upload artifact
-    needs: qa
+  qa:
+    name: Running integration tests
+    needs: tests
     runs-on: ubuntu-latest
     steps:
     # checkout code
@@ -34,8 +34,50 @@ jobs:
         cache: maven
     # build and run integration tests
     - run: mvn --batch-mode --update-snapshots verify
-    # upload artifact
-    - uses: actions/upload-artifact@v2
+  build:
+    name: Build image to GCP image registry
+    needs: qa
+    runs-on: ubunt-latest
+    steps:
+    # checkout code
+    - uses: actions/checkout@v1
+    # auth to GCP
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
-        name: artifact
-        path: target/*.jar
+        version: 'latest'
+        service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+    # auth docker for GCP
+    - run: |
+        gcloud auth configure-docker
+    # build image
+    - run: |
+        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/demo:latest .
+    # push image to GCP Container Registry
+    - run: |
+        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/demo:latest .
+  deploy:
+    name: Deploy image to GCP Cloud Run
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # checkout code
+      - uses: actions/checkout@v1
+      # auth to GCP
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: 'latest'
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+      # deploy image to GCP Cloud Run
+      - run: |
+          gcloud run deploy demo \
+          --region europe-west1 \
+          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/demo \
+          --plaform managed \
+          --allow-unauthenticated \
+          --project ${{ secrets.GCP_PROJECT_ID }}
+
+
