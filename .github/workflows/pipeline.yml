@@ -58,7 +58,7 @@ jobs:
         docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/demo:latest .
     # push image to GCP Container Registry
     - run: |
-        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/demo:latest .
+        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/demo:latest
   deploy:
     name: Deploy image to GCP Cloud Run
     needs: build
