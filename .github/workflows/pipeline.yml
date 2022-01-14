@@ -22,6 +22,7 @@ jobs:
     - run: mvn --batch-mode test
   build:
     name: Build and upload artifact
+    needs: qa
     runs-on: ubuntu-latest
     steps:
     # checkout code
