@@ -44,7 +44,7 @@ jobs:
     # checkout code
     - uses: actions/checkout@v1
     # auth to GCP
-    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@master
       with:
         version: 'latest'
         service_account_email: ${{ secrets.GCP_SA_EMAIL }}
@@ -67,7 +67,7 @@ jobs:
       # checkout code
       - uses: actions/checkout@v1
       # auth to GCP
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - uses: google-github-actions/setup-gcloud@master
         with:
           version: 'latest'
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
