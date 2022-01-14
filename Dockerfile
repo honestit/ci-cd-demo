@@ -7,5 +7,7 @@ USER demo:demo
 ARG JAR_FILE=target/*.jar
 # Copy jar as a predefined file
 COPY ${JAR_FILE} app.jar
+# Expose default port
+EXPOSE 8080
 # Set entry point to run jar file
 ENTRYPOINT ["java","-jar","/app.jar"]
