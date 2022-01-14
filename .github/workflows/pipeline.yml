@@ -1,0 +1,40 @@
+name: CI/CD Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+
+jobs:
+  qa:
+    name: Running tests
+    runs-on: ubuntu-latest
+    steps:
+    # checkout code
+    - uses: actions/checkout@v1
+    # setup java 11
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '11'
+        cache: maven
+    # run tests
+    - run: mvn --batch-mode test
+  build:
+    name: Build and upload artifact
+    runs-on: ubuntu-latest
+    steps:
+    # checkout code
+    - uses: actions/checkout@v1
+    # setup java 11
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '11'
+        cache: maven
+    # build and run integration tests
+    - run: mvn --batch-mode --update-snapshots verify
+    # upload artifact
+    - uses: actions/upload-artifact@v2
+      with:
+        name: artifact
+        path: target/*.jar
