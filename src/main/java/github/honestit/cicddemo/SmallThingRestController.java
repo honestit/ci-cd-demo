@@ -37,7 +37,7 @@ public class SmallThingRestController {
         smallThing.setId(UUID.randomUUID().toString());
         smallThingRepository.save(smallThing);
         return ResponseEntity.created(MvcUriComponentsBuilder.fromController(SmallThingRestController.class)
-                .path("/{id}").buildAndExpand(smallThing.id).toUri()).build();
+                .path("/{id}").buildAndExpand(smallThing.getId()).toUri()).build();
 
     }
 }

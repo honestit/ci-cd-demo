@@ -20,9 +20,9 @@ public class CiCdDemoApplication {
 
 	@PostConstruct
 	void setUpData() {
-		smallThingRepository.save(SmallThing.builder().id(UUID.randomUUID().toString()).name("first").build());
-		smallThingRepository.save(SmallThing.builder().id(UUID.randomUUID().toString()).name("second").build());
-		smallThingRepository.save(SmallThing.builder().id(UUID.randomUUID().toString()).name("third").build());
+		smallThingRepository.save(new SmallThing(UUID.randomUUID().toString(), "first"));
+		smallThingRepository.save(new SmallThing(UUID.randomUUID().toString(), "second"));
+		smallThingRepository.save(new SmallThing(UUID.randomUUID().toString(), "third"));
 	}
 
 }
